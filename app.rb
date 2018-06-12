@@ -1,6 +1,7 @@
 include Math
+
 def calcchoose
-  puts "\n Choose a calculator"
+  puts "\nChoose a calculator"
   puts "1=Basic 2=Advanced 3=BMI 4=Trip"
   calcchoice = gets.chomp.to_i
   if calcchoice == 1
@@ -18,18 +19,23 @@ def calcchoose
 end
 
 def basiccalc
-  puts "\nEnter your sum including +, -, *, / (Enter back to go back)"
-  usr_equation = gets.chomp
-  if usr_equation.downcase == "back"
+  print "\nEnter an operator +, -, *, / (Enter back to go back): "
+  usr_op = gets.chomp.strip
+  if usr_op.downcase == "back"
     calcchoose
   end
+  print "\nEnter some numbers split with spaces (e.g. 2 2 3): "
+  usr_nums = gets.chomp
+  usr_nums = usr_nums.split(" ").map{|x| x.to_i}
   begin
-    puts "\n  --| #{usr_equation} = #{instance_eval(usr_equation)} |--"
-  rescue
-    puts "\n Not valid a valid sum try again:"
+    result = removeDecimals usr_nums.inject(usr_op.to_sym)
+  rescue NoMethodError
+    puts "\n Operator not valid try again:"
     basiccalc
   end
+  puts "\n  --| #{result} |--"
   basiccalc
+  #NoMethodError
 end
 
 def advancedcalc
@@ -37,23 +43,46 @@ def advancedcalc
   puts "1=Power 2=Square root (Enter back to go back)"
   usr_op = gets.chomp
   if usr_op.to_i == 1
-    puts "\n Enter the first number"
+    print "\nEnter the first number"
     num1 = gets.chomp.to_i
-    puts "\n Enter the second number"
+    print "\nEnter the second number"
     num2 = gets.chomp.to_i
     puts "\n  --| #{num1}^#{num2} = #{num1**num2} |--"
     advancedcalc
   elsif usr_op.to_i == 2
-    puts "\n Enter a number to square"
+    print "\nEnter a number to square: "
     num1 = gets.chomp.to_i
-    puts "\n  --| √#{num1} = #{Math.sqrt(num1)} |--"
+    puts "\n  --| √#{num1} = #{removeDecimals Math.sqrt(num1)} |--"
     advancedcalc
   elsif usr_op == "back"
     calcchoose
   else
-    puts "\n Not a available operator! try again"
+    puts "\nNot a available operator! try again"
     advancedcalc
   end
+end
+
+def bmicalc
+  puts "\n Which measurement would you like?"
+  puts "1=Imperial 2=Metric (Enter back to go back)"
+  imperial_toggle = false
+  usr_msr = gets.chomp.to_i
+  if usr_msr == 1
+    imperial_toggle = true
+  elsif usr_msr == "back"
+    calcchoose
+  else
+    puts "\nNot a available measurement! try again"
+    bmicalc
+  end
+  print imperial_toggle ? "Enter your weight in pounds: " : "Enter your weight in kilograms: "
+  weight = gets.chomp
+  print imperial_toggle ? "Enter your height in inches: " : "Enter your height in meters: "
+  height = gets.chomp
+end
+
+def removeDecimals num
+  num.to_s.sub(/\.?0+$/, '')
 end
 
 #Run program
