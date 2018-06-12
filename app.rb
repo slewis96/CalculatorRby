@@ -96,6 +96,28 @@ def bmicalc
   bmicalc
 end
 
+def tripcalc
+  print "\n How far are you travelling (in miles)? "
+  distance = gets.chomp.to_f
+  print "\n How fuel effcient is you car (in mpg)? "
+  mpg = gets.chomp.to_f
+  print "\n How much does fuel cost per gallon (in pounds)? "
+  cpg = gets.chomp.to_f
+  print "\n How fast will you be going (in mph)? "
+  mph = gets.chomp.to_f
+
+  time = distance/mph
+  cost = cpg
+  i = mpg
+  if mph > 60
+    mpg -= (mph-60)*2
+  end
+  cost = (distance/mpg)*cpg
+
+  puts "\n Your trip will take #{removeDecimals time} hour(s) and cost you £#{removeDecimals cost}"
+  calcchoose
+end
+
 def removeDecimals num
   num.to_s.sub(/\.?0+$/, '')
 end
